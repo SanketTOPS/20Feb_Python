@@ -46,8 +46,12 @@
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
+                {% if user is none %}
                 <a href="/signup" class="btn btn-warning mx-2">Signup</a>
-                <a href="/login" class="btn btn-primary">Login</a>
+                <a href="/login" class="btn btn-primary ">Login</a>
+                {% else %}
+                <a href="" class="btn btn-danger mx-2">Logout</a>
+                {% endif %}
             </div>
         </div>
     </nav>
