@@ -3,6 +3,7 @@ from .forms import *
 from django.core.mail import send_mail
 import random
 from FinalProject import settings
+from django.contrib.auth import logout
 
 # Create your views here.
 
@@ -16,9 +17,12 @@ def login(request):
         pas=request.POST['password']
 
         user=usersignup.objects.filter(username=unm,password=pas)
+        id=usersignup.objects.get(username=unm)
+        print("UserID:",id.id)
         if user:
             print("Login Successfully!")
             request.session['user']=unm
+            request.session['userid']=id.id
             return redirect('/')
         else:
             print("Error!Login faild....")
@@ -65,3 +69,22 @@ def otpverify(request):
             print("Invalid OTP...Please try again!")
             msg="Invalid OTP...Please try again!"
     return render(request,'otpverify.html',{'msg':msg})
+
+
+def userlogout(request):
+    logout(request)
+    return redirect('/')
+
+def profile(request):
+    user=request.session.get('user')
+    userid=request.session.get('userid')
+    cid=usersignup.objects.get(id=userid)
+    if request.method=='POST':
+        updateReq=signupForm(request.POST,instance=cid)
+        if updateReq.is_valid():
+            updateReq.save()
+            print("Update successfully!")
+            return redirect('/')
+        else:
+            print(updateReq.errors)
+    return render(request,'profile.html',{'user':user,'cid':cid})

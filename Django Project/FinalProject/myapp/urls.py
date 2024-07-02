@@ -10,4 +10,6 @@ urlpatterns = [
     path('about/',views.about),
     path('contact/',views.contact),
     path('otpverify/',views.otpverify,name='otpverify'),
+    path('userlogout/',views.userlogout),
+    path('profile/',views.profile),
 ]
