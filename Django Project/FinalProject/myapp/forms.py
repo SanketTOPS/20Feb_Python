@@ -6,3 +6,9 @@ class signupForm(forms.ModelForm):
     class Meta:
         model=usersignup
         fields='__all__'
+
+
+class notesForm(forms.ModelForm):
+    class Meta:
+        model=notes
+        fields='__all__'

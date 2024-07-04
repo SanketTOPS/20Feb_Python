@@ -50,7 +50,15 @@ def signup(request):
     return render(request,'signup.html')
 
 def notes(request):
-    return render(request,'notes.html')
+    user=request.session.get('user')
+    if request.method=='POST':
+        newnotes=notesForm(request.POST,request.FILES)
+        if newnotes.is_valid():
+            newnotes.save()
+            print("Your notes has been submitted!")
+        else:
+            print(newnotes.errors)
+    return render(request,'notes.html',{'user':user})
 
 def about(request):
     return render(request,'about.html')
