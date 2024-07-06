@@ -61,10 +61,26 @@ def notes(request):
     return render(request,'notes.html',{'user':user})
 
 def about(request):
-    return render(request,'about.html')
+    user=request.session.get('user')
+    return render(request,'about.html',{'user':user})
 
 def contact(request):
-    return render(request,'contact.html')
+    user=request.session.get('user')
+    if request.method=='POST':
+        newfeedback=feedbackForm(request.POST)
+        if newfeedback.is_valid():
+            newfeedback.save()
+            print("Your feedback has been submitted!")
+
+            #Feedback Email Sending Code
+            sub="Thank You!"
+            msg=f"Dear User\n\nThanks for your valueable feedback!\n\nThanks & Regards!\n+91 9724799469 | www.tops-int.com"
+            from_email=settings.EMAIL_HOST_USER
+            to_email=[request.POST['email']]
+            send_mail(subject=sub,message=msg,from_email=from_email,recipient_list=to_email)
+        else:
+            print(newfeedback.errors)
+    return render(request,'contact.html',{'user':user})
 
 def otpverify(request):
     global otp
