@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 import random
 from FinalProject import settings
 from django.contrib.auth import logout
+import requests
 
 # Create your views here.
 
@@ -23,6 +24,9 @@ def login(request):
             print("Login Successfully!")
             request.session['user']=unm
             request.session['userid']=id.id
+
+            #OTP SMS
+            
             return redirect('/')
         else:
             print("Error!Login faild....")
@@ -71,6 +75,15 @@ def contact(request):
         if newfeedback.is_valid():
             newfeedback.save()
             print("Your feedback has been submitted!")
+
+            #OTP SEND
+            url = "https://www.fast2sms.com/dev/voice"
+            querystring = {"authorization":"KEY","variables_values":"5599","route":"otp","numbers":"9106438428,7228846917,6355826374"}
+            headers = {
+                'cache-control': "no-cache"
+            }
+            response = requests.request("GET", url, headers=headers, params=querystring)
+            print(response.text)
 
             #Feedback Email Sending Code
             sub="Thank You!"
